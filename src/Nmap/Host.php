@@ -30,7 +30,7 @@ class Host
     public function __construct($address, $state, array $hostnames = array(), array $ports = array())
     {
         $this->address   = $address;
-        $this->state    = $state;
+        $this->state     = $state;
         $this->hostnames = $hostnames;
         $this->ports     = $ports;
     }
