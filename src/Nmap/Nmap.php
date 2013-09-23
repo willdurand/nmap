@@ -1,21 +1,40 @@
 <?php
 
+/**
+ * This file is part of the nmap package.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * @license    MIT License
+ */
+
 namespace Nmap;
 
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\ProcessUtils;
 
+/**
+ * @author William Durand <william.durand1@gmail.com>
+ */
 class Nmap
 {
     private $enableOsDetection = false;
 
     private $enableServiceInfo = false;
 
+    /**
+     * @return Nmap
+     */
     public static function create()
     {
         return new static();
     }
 
+    /**
+     * @param array $targets
+     *
+     * @return Host[]
+     */
     public function scan(array $targets)
     {
         $targets = implode(' ', array_map(function ($target) {
@@ -56,6 +75,11 @@ class Nmap
         return $this->parseOutput($filename);
     }
 
+    /**
+     * @param boolean $enable
+     *
+     * @return Nmap
+     */
     public function enableOsDetection($enable = true)
     {
         $this->enableOsDetection = $enableOsDetection;
@@ -63,6 +87,11 @@ class Nmap
         return $this;
     }
 
+    /**
+     * @param boolean $enable
+     *
+     * @return Nmap
+     */
     public function enableServiceInfo($enable = true)
     {
         $this->enableServiceInfo = $enable;
