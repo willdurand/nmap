@@ -10,7 +10,8 @@
 
 namespace Nmap;
 
-use Symfony\Component\Process\Process;
+use Nmap\Util\Filesystem;
+use Nmap\Util\ProcessExecutor;
 use Symfony\Component\Process\ProcessUtils;
 
 /**
@@ -18,6 +19,10 @@ use Symfony\Component\Process\ProcessUtils;
  */
 class Nmap
 {
+    private $executor;
+
+    private $filesystem;
+
     private $enableOsDetection = false;
 
     private $enableServiceInfo = false;
@@ -28,6 +33,16 @@ class Nmap
     public static function create()
     {
         return new static();
+    }
+
+    /**
+     * @param ProcessExecutor $executor
+     * @param Filesystem      $filesystem
+     */
+    public function __construct(ProcessExecutor $executor = null, Filesystem $filesystem = null)
+    {
+        $this->executor   = $executor ?: new ProcessExecutor();
+        $this->filesystem = $filesystem ?: new Filesystem();
     }
 
     /**
@@ -50,23 +65,14 @@ class Nmap
             $options[] = '-sV';
         }
 
-        $filename = sys_get_temp_dir() . '/output.xml';
+        $filename = $this->filesystem->getTemporaryFile();
         $command  = sprintf('nmap %s-oX %s %s',
             implode(' ', $options),
             ProcessUtils::escapeArgument($filename),
             $targets
         );
 
-        $process = new Process($command);
-        $process->run();
-
-        if (!$process->isSuccessful()) {
-            throw new \RuntimeException(sprintf(
-                'Failed to execute "%s"' . PHP_EOL . '%s',
-                $command,
-                $process->getErrorOutput()
-            ));
-        }
+        $this->executor->execute($command);
 
         if (!file_exists($filename)) {
             throw new \RuntimeException(sprintf('Output file not found ("%s")', $filename));
