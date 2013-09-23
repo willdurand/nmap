@@ -27,7 +27,7 @@ class NmapTest extends TestCase
             ->will($this->returnValue($outputFile));
 
         $nmap  = new Nmap($executor, $filesystem);
-        $hosts = $nmap->scan([ 'williamdurand.fr' ]);
+        $hosts = $nmap->scan(array('williamdurand.fr'));
         $this->assertCount(1, $hosts);
 
         $host = current($hosts);
