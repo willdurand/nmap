@@ -1,0 +1,19 @@
+{
+    "name": "willdurand/nmap",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "William DURAND",
+            "email": "william.durand1@gmail.com"
+        }
+    ],
+    "require": {
+        "symfony/process": "~2.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~3.7"
+    },
+    "autoload": {
+        "psr-0": { "Nmap": "src/" }
+    }
+}
