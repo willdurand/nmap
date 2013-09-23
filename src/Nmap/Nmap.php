@@ -72,7 +72,7 @@ class Nmap
             throw new \RuntimeException(sprintf('Output file not found ("%s")', $filename));
         }
 
-        return $this->parseOutput($filename);
+        return $this->parseOutputFile($filename);
     }
 
     /**
@@ -99,40 +99,50 @@ class Nmap
         return $this;
     }
 
-    private function parseOutput($filename)
+    private function parseOutputFile($filename)
     {
         $xml = simplexml_load_file($filename);
 
         $hosts = array();
         foreach ($xml->host as $host) {
-            $hostnames = array();
-            foreach ($host->hostnames->hostname as $hostname) {
-                $hostnames[] = new Hostname(
-                    (string) $hostname->attributes()->name,
-                    (string) $hostname->attributes()->type
-                );
-            }
-
-            $ports = array();
-            foreach ($host->ports->port as $port) {
-                $ports[] = new Port(
-                    (string) $port->attributes()->portid,
-                    (string) $port->attributes()->protocol,
-                    (string) $port->state->attributes()->state,
-                    new Service(
-                        (string) $port->service->attributes()->name
-                    )
-                );
-            }
-
             $hosts[] = new Host(
                 (string) $host->address->attributes()->addr,
                 (string) $host->status->attributes()->state,
-                $hostnames,
-                $ports
+                $this->parseHostnames($host->hostnames->hostname),
+                $this->parsePorts($host->ports->port)
             );
         }
 
         return $hosts;
+    }
+
+    private function parseHostnames(\SimpleXMLElement $xmlHostnames)
+    {
+        $hostnames = array();
+        foreach ($xmlHostnames as $hostname) {
+            $hostnames[] = new Hostname(
+                (string) $hostname->attributes()->name,
+                (string) $hostname->attributes()->type
+            );
+        }
+
+        return $hostnames;
+    }
+
+    private function parsePorts(\SimpleXMLElement $xmlPorts)
+    {
+        $ports = array();
+        foreach ($xmlPorts as $port) {
+            $ports[] = new Port(
+                (string) $port->attributes()->portid,
+                (string) $port->attributes()->protocol,
+                (string) $port->state->attributes()->state,
+                new Service(
+                    (string) $port->service->attributes()->name
+                )
+            );
+        }
+
+        return $ports;
     }
 }
