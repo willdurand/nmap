@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="file:///opt/boxen/homebrew/bin/../share/nmap/nmap.xsl" type="text/xsl"?>
+<!-- Nmap 6.25 scan initiated Mon Sep 23 23:46:08 2013 as: nmap -O -oX tests/Nmap/Tests/Fixtures/test_scan_with_os_detection.xml williamdurand.fr -->
+<nmaprun scanner="nmap" args="nmap -O -oX tests/Nmap/Tests/Fixtures/test_scan_with_os_detection.xml williamdurand.fr" start="1379972768" startstr="Mon Sep 23 23:46:08 2013" version="6.25" xmloutputversion="1.04">
+    <verbose level="0"/>
+    <debugging level="0"/>
+    <host starttime="1379972768" endtime="1379972780"><status state="up" reason="reset" reason_ttl="47"/>
+        <address addr="204.232.175.78" addrtype="ipv4"/>
+        <hostnames>
+            <hostname name="williamdurand.fr" type="user"/>
+            <hostname name="pages.github.com" type="PTR"/>
+        </hostnames>
+        <ports>
+            <extraports state="filtered" count="997">
+                <extrareasons reason="no-responses" count="996"/>
+                <extrareasons reason="port-unreach" count="1"/>
+            </extraports>
+            <port protocol="tcp" portid="22"><state state="open" reason="syn-ack" reason_ttl="47"/><service name="ssh" method="table" conf="3"/></port>
+            <port protocol="tcp" portid="80"><state state="open" reason="syn-ack" reason_ttl="47"/><service name="http" method="table" conf="3"/></port>
+            <port protocol="tcp" portid="443"><state state="closed" reason="reset" reason_ttl="47"/><service name="https" method="table" conf="3"/></port>
+        </ports>
+        <os>
+            <portused state="open" proto="tcp" portid="22"/>
+            <portused state="closed" proto="tcp" portid="443"/>
+            <osmatch name="Cisco SRP 521W WAP (Linux 2.6)" accuracy="93" line="13678">
+                <osclass type="WAP" vendor="Cisco" osfamily="Linux" osgen="2.6.X" accuracy="93"><cpe>cpe:/h:cisco:srp_521w</cpe><cpe>cpe:/o:cisco:linux:2.6</cpe></osclass>
+            </osmatch>
+            <osmatch name="Linux 2.6.9 - 2.6.27" accuracy="93" line="42435">
+                <osclass type="general purpose" vendor="Linux" osfamily="Linux" osgen="2.6.X" accuracy="93"><cpe>cpe:/o:linux:linux_kernel:2.6</cpe></osclass>
+            </osmatch>
+            <osmatch name="OpenWrt Kamikaze 7.09 (Linux 2.6.22)" accuracy="93" line="43383">
+                <osclass type="WAP" vendor="Linux" osfamily="Linux" osgen="2.6.X" accuracy="93"><cpe>cpe:/o:linux:linux_kernel:2.6.22</cpe></osclass>
+            </osmatch>
+            <osmatch name="Asus RT-N16 WAP (Linux 2.6)" accuracy="93" line="6129">
+                <osclass type="WAP" vendor="Asus" osfamily="Linux" osgen="2.6.X" accuracy="93"><cpe>cpe:/h:asus:rt-n16</cpe><cpe>cpe:/o:asus:linux:2.6</cpe></osclass>
+            </osmatch>
+            <osmatch name="Tomato 1.28 (Linux 2.6.22)" accuracy="93" line="43422">
+                <osclass type="WAP" vendor="Linux" osfamily="Linux" osgen="2.6.X" accuracy="93"><cpe>cpe:/o:linux:linux_kernel:2.6.22</cpe></osclass>
+            </osmatch>
+            <osmatch name="Asus RT-N66U WAP (Linux 2.6)" accuracy="93" line="72898">
+                <osclass type="WAP" vendor="Asus" osfamily="Linux" osgen="2.6.X" accuracy="93"><cpe>cpe:/o:asus:linux:2.6</cpe></osclass>
+            </osmatch>
+            <osmatch name="Linux 2.6.18 - 2.6.24" accuracy="93" line="35219">
+                <osclass type="general purpose" vendor="Linux" osfamily="Linux" osgen="2.6.X" accuracy="93"><cpe>cpe:/o:linux:linux_kernel:2.6</cpe></osclass>
+            </osmatch>
+            <osmatch name="Linux 2.6.21 (Arch Linux 0.8, x86)" accuracy="93" line="36010">
+                <osclass type="general purpose" vendor="Linux" osfamily="Linux" osgen="2.6.X" accuracy="93"><cpe>cpe:/o:linux:linux_kernel:2.6.21</cpe></osclass>
+            </osmatch>
+            <osmatch name="Linux 2.6.23" accuracy="93" line="37134">
+                <osclass type="general purpose" vendor="Linux" osfamily="Linux" osgen="2.6.X" accuracy="93"><cpe>cpe:/o:linux:linux_kernel:2.6.23</cpe></osclass>
+            </osmatch>
+            <osmatch name="Linux 2.6.26" accuracy="93" line="37894">
+                <osclass type="general purpose" vendor="Linux" osfamily="Linux" osgen="2.6.X" accuracy="93"><cpe>cpe:/o:linux:linux_kernel:2.6.26</cpe></osclass>
+            </osmatch>
+        </os>
+        <uptime seconds="870805" lastboot="Fri Sep 13 21:52:55 2013"/>
+        <tcpsequence index="258" difficulty="Good luck!" values="C0A53E6D,6701C8BC,CD14DBD1,68435D36,4A71E29F,E1422648"/>
+        <ipidsequence class="All zeros" values="0,0,0,0,0,0"/>
+        <tcptssequence class="other" values="CEC901C,CEC9039,CEC9053,CEC906D,CEC9087,CEC90A2"/>
+        <times srtt="102685" rttvar="2861" to="114129"/>
+    </host>
+    <runstats>
+        <finished time="1379972780" timestr="Mon Sep 23 23:46:20 2013" elapsed="12.35" summary="Nmap done at Mon Sep 23 23:46:20 2013; 1 IP address (1 host up) scanned in 12.35 seconds" exit="success"/>
+        <hosts up="1" down="0" total="1"/>
+    </runstats>
+</nmaprun>

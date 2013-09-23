@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="file:///opt/boxen/homebrew/bin/../share/nmap/nmap.xsl" type="text/xsl"?>
+<!-- Nmap 6.25 scan initiated Mon Sep 23 23:50:43 2013 as: nmap -sV -oX tests/Nmap/Tests/Fixtures/test_scan_with_service_info.xml williamdurand.fr -->
+<nmaprun scanner="nmap" args="nmap -sV -oX tests/Nmap/Tests/Fixtures/test_scan_with_service_info.xml williamdurand.fr" start="1379973043" startstr="Mon Sep 23 23:50:43 2013" version="6.25" xmloutputversion="1.04">
+    <verbose level="0"/>
+    <debugging level="0"/>
+    <host starttime="1379973043" endtime="1379973057"><status state="up" reason="syn-ack" reason_ttl="0"/>
+        <address addr="204.232.175.78" addrtype="ipv4"/>
+        <hostnames>
+            <hostname name="williamdurand.fr" type="user"/>
+            <hostname name="pages.github.com" type="PTR"/>
+        </hostnames>
+        <ports>
+            <extraports state="filtered" count="996">
+                <extrareasons reason="no-responses" count="996"/>
+            </extraports>
+            <port protocol="tcp" portid="22">
+                <state state="open" reason="syn-ack" reason_ttl="0"/>
+                <service name="ssh" product="OpenSSH" version="5.1p1 Debian 5github8" extrainfo="protocol 2.0" ostype="Linux" method="probed" conf="10">
+                    <cpe>cpe:/a:openbsd:openssh:5.1p1</cpe><cpe>cpe:/o:linux:linux_kernel</cpe>
+                </service>
+            </port>
+            <port protocol="tcp" portid="80">
+                <state state="open" reason="syn-ack" reason_ttl="0"/>
+                <service name="http" product="nginx" method="probed" conf="10">
+                    <cpe>cpe:/a:igor_sysoev:nginx</cpe>
+                </service>
+            </port>
+            <port protocol="tcp" portid="113">
+                <state state="closed" reason="conn-refused" reason_ttl="0"/>
+                <service name="ident" method="table" conf="3"/>
+            </port>
+            <port protocol="tcp" portid="443">
+                <state state="closed" reason="conn-refused" reason_ttl="0"/>
+                <service name="https" method="table" conf="3"/>
+            </port>
+        </ports>
+        <times srtt="103902" rttvar="10643" to="146474"/>
+    </host>
+    <runstats>
+        <finished time="1379973057" timestr="Mon Sep 23 23:50:57 2013" elapsed="13.77" summary="Nmap done at Mon Sep 23 23:50:57 2013; 1 IP address (1 host up) scanned in 13.77 seconds" exit="success"/>
+        <hosts up="1" down="0" total="1"/>
+    </runstats>
+</nmaprun>

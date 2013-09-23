@@ -47,4 +47,40 @@ class NmapTest extends TestCase
         $this->assertNotNull($ports[0]->getService());
         $this->assertEquals('ssh', $ports[0]->getService()->getName());
     }
+
+    public function testScanWithOsDetection()
+    {
+        $outputFile      = __DIR__ . '/Fixtures/test_scan_with_os_detection.xml';
+        $expectedCommand = sprintf("nmap -O -oX '%s' 'williamdurand.fr'", $outputFile);
+
+        $executor = $this->getMock('Nmap\Util\ProcessExecutor');
+        $executor
+            ->expects($this->once())
+            ->method('execute')
+            ->with($this->equalTo($expectedCommand))
+            ->will($this->returnValue(0));
+
+        $nmap  = new Nmap($executor, $outputFile);
+        $hosts = $nmap
+            ->enableOsDetection()
+            ->scan(array('williamdurand.fr'));
+    }
+
+    public function testScanWithServiceInfo()
+    {
+        $outputFile      = __DIR__ . '/Fixtures/test_scan_with_service_info.xml';
+        $expectedCommand = sprintf("nmap -sV -oX '%s' 'williamdurand.fr'", $outputFile);
+
+        $executor = $this->getMock('Nmap\Util\ProcessExecutor');
+        $executor
+            ->expects($this->once())
+            ->method('execute')
+            ->with($this->equalTo($expectedCommand))
+            ->will($this->returnValue(0));
+
+        $nmap  = new Nmap($executor, $outputFile);
+        $hosts = $nmap
+            ->enableServiceInfo()
+            ->scan(array('williamdurand.fr'));
+    }
 }

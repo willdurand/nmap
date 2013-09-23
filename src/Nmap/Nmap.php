@@ -64,7 +64,8 @@ class Nmap
             $options[] = '-sV';
         }
 
-        $command = sprintf('nmap %s-oX %s %s',
+        $options[] = '-oX';
+        $command   = sprintf('nmap %s %s %s',
             implode(' ', $options),
             ProcessUtils::escapeArgument($this->outputFile),
             $targets
@@ -86,7 +87,7 @@ class Nmap
      */
     public function enableOsDetection($enable = true)
     {
-        $this->enableOsDetection = $enableOsDetection;
+        $this->enableOsDetection = $enable;
 
         return $this;
     }
