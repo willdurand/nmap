@@ -1,5 +1,6 @@
 {
     "name": "willdurand/nmap",
+    "description": "nmap is a PHP wrapper for Nmap, a free security scanner for network exploration.",
     "license": "MIT",
     "authors": [
         {
@@ -8,6 +9,7 @@
         }
     ],
     "require": {
+        "php": ">=5.3.0",
         "symfony/process": "~2.0"
     },
     "require-dev": {
@@ -15,5 +17,8 @@
     },
     "autoload": {
         "psr-0": { "Nmap": "src/" }
+    },
+    "config": {
+        "bin-dir": "bin"
     }
 }
