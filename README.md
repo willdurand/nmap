@@ -20,7 +20,7 @@ $ports = $hosts->getOpenPorts();
 Installation
 ------------
 
-The recommended way to install Negotiation is through
+The recommended way to install nmap is through
 [Composer](http://getcomposer.org/):
 
 ``` json
