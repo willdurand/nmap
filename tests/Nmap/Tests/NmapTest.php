@@ -20,13 +20,7 @@ class NmapTest extends TestCase
             ->with($this->equalTo($expectedCommand))
             ->will($this->returnValue(0));
 
-        $filesystem = $this->getMock('Nmap\Util\Filesystem');
-        $filesystem
-            ->expects($this->once())
-            ->method('getTemporaryFile')
-            ->will($this->returnValue($outputFile));
-
-        $nmap  = new Nmap($executor, $filesystem);
+        $nmap  = new Nmap($executor, $outputFile);
         $hosts = $nmap->scan(array('williamdurand.fr'));
         $this->assertCount(1, $hosts);
 

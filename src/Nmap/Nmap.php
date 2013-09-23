@@ -10,7 +10,6 @@
 
 namespace Nmap;
 
-use Nmap\Util\Filesystem;
 use Nmap\Util\ProcessExecutor;
 use Symfony\Component\Process\ProcessUtils;
 
@@ -21,7 +20,7 @@ class Nmap
 {
     private $executor;
 
-    private $filesystem;
+    private $outputFile;
 
     private $enableOsDetection = false;
 
@@ -37,12 +36,12 @@ class Nmap
 
     /**
      * @param ProcessExecutor $executor
-     * @param Filesystem      $filesystem
+     * @param string          $outputFile
      */
-    public function __construct(ProcessExecutor $executor = null, Filesystem $filesystem = null)
+    public function __construct(ProcessExecutor $executor = null, $outputFile = null)
     {
         $this->executor   = $executor ?: new ProcessExecutor();
-        $this->filesystem = $filesystem ?: new Filesystem();
+        $this->outputFile = $outputFile ?: sys_get_temp_dir() . '/output.xml';
     }
 
     /**
@@ -65,20 +64,19 @@ class Nmap
             $options[] = '-sV';
         }
 
-        $filename = $this->filesystem->getTemporaryFile();
-        $command  = sprintf('nmap %s-oX %s %s',
+        $command = sprintf('nmap %s-oX %s %s',
             implode(' ', $options),
-            ProcessUtils::escapeArgument($filename),
+            ProcessUtils::escapeArgument($this->outputFile),
             $targets
         );
 
         $this->executor->execute($command);
 
-        if (!file_exists($filename)) {
-            throw new \RuntimeException(sprintf('Output file not found ("%s")', $filename));
+        if (!file_exists($this->outputFile)) {
+            throw new \RuntimeException(sprintf('Output file not found ("%s")', $this->outputFile));
         }
 
-        return $this->parseOutputFile($filename);
+        return $this->parseOutputFile($this->outputFile);
     }
 
     /**
@@ -105,9 +103,9 @@ class Nmap
         return $this;
     }
 
-    private function parseOutputFile($filename)
+    private function parseOutputFile($xmlFile)
     {
-        $xml = simplexml_load_file($filename);
+        $xml = simplexml_load_file($xmlFile);
 
         $hosts = array();
         foreach ($xml->host as $host) {
