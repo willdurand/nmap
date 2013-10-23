@@ -15,6 +15,7 @@ use Symfony\Component\Process\ProcessUtils;
 
 /**
  * @author William Durand <william.durand1@gmail.com>
+ * @author Aitor García <aitor.falc@gmail.com>
  */
 class Nmap
 {
@@ -25,6 +26,8 @@ class Nmap
     private $enableOsDetection = false;
 
     private $enableServiceInfo = false;
+
+    private $enableVerbose = false;
 
     /**
      * @return Nmap
@@ -46,10 +49,11 @@ class Nmap
 
     /**
      * @param array $targets
+     * @param array $ports
      *
      * @return Host[]
      */
-    public function scan(array $targets)
+    public function scan(array $targets, array $ports = array())
     {
         $targets = implode(' ', array_map(function ($target) {
             return ProcessUtils::escapeArgument($target);
@@ -64,7 +68,16 @@ class Nmap
             $options[] = '-sV';
         }
 
+        if (true === $this->enableVerbose) {
+            $options[] = '-v';
+        }
+
+        if (!empty($ports)) {
+            $options[] = '-p '.implode(',', $ports);
+        }
+
         $options[] = '-oX';
+
         $command   = sprintf('nmap %s %s %s',
             implode(' ', $options),
             ProcessUtils::escapeArgument($this->outputFile),
@@ -104,6 +117,18 @@ class Nmap
         return $this;
     }
 
+    /**
+     * @param boolean $enable
+     *
+     * @return Nmap
+     */
+    public function enableVerbose($enable = true)
+    {
+        $this->enableVerbose = $enable;
+
+        return $this;
+    }
+
     private function parseOutputFile($xmlFile)
     {
         $xml = simplexml_load_file($xmlFile);
@@ -113,8 +138,8 @@ class Nmap
             $hosts[] = new Host(
                 (string) $host->address->attributes()->addr,
                 (string) $host->status->attributes()->state,
-                $this->parseHostnames($host->hostnames->hostname),
-                $this->parsePorts($host->ports->port)
+                isset($host->hostnames) ? $this->parseHostnames($host->hostnames->hostname) : array(),
+                isset($host->ports) ? $this->parsePorts($host->ports->port) : array()
             );
         }
 
