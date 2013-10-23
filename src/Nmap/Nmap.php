@@ -29,6 +29,8 @@ class Nmap
 
     private $enableVerbose = false;
 
+    private $disablePortScan = false;
+
     /**
      * @return Nmap
      */
@@ -72,8 +74,13 @@ class Nmap
             $options[] = '-v';
         }
 
-        if (!empty($ports)) {
-            $options[] = '-p '.implode(',', $ports);
+        if (true === $this->disablePortScan) {
+            $options[] = '-sn';
+        }
+        else {
+            if (!empty($ports)) {
+                $options[] = '-p '.implode(',', $ports);
+            }
         }
 
         $options[] = '-oX';
@@ -125,6 +132,18 @@ class Nmap
     public function enableVerbose($enable = true)
     {
         $this->enableVerbose = $enable;
+
+        return $this;
+    }
+
+    /**
+     * @param boolean $enable
+     *
+     * @return Nmap
+     */
+    public function disablePortScan($disable = true)
+    {
+        $this->disablePortScan = $disable;
 
         return $this;
     }
