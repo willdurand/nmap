@@ -52,8 +52,8 @@ $nmap
     ->scan([ 'williamdurand.fr' ]);
 ```
 
-For some reasons, you might want to disable port scan, that is why **Nmap**
-provides a `disablePortScan()` method.
+For some reasons, you might want to disable port scan, that is why **nmap**
+provides a `disablePortScan()` method:
 
 ``` php
 $nmap
