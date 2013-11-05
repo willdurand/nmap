@@ -27,9 +27,9 @@ class Nmap
 
     private $enableServiceInfo = false;
 
-    private $enableVerbose = false;
+    private $enableVerbose     = false;
 
-    private $disablePortScan = false;
+    private $disablePortScan   = false;
 
     /**
      * @return Nmap
@@ -76,14 +76,11 @@ class Nmap
 
         if (true === $this->disablePortScan) {
             $options[] = '-sn';
-        } else {
-            if (!empty($ports)) {
-                $options[] = '-p '.implode(',', $ports);
-            }
+        } elseif (!empty($ports)) {
+            $options[] = '-p '.implode(',', $ports);
         }
 
         $options[] = '-oX';
-
         $command   = sprintf('nmap %s %s %s',
             implode(' ', $options),
             ProcessUtils::escapeArgument($this->outputFile),
@@ -136,7 +133,7 @@ class Nmap
     }
 
     /**
-     * @param boolean $enable
+     * @param boolean $disable
      *
      * @return Nmap
      */
