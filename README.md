@@ -15,8 +15,50 @@ Usage
 $hosts = Nmap::create()->scan([ 'williamdurand.fr' ]);
 
 $ports = $hosts->getOpenPorts();
+```
 
-// ...
+You can specify the ports you want to scan:
+
+``` php
+$nmap = new Nmap();
+
+$nmap->scan([ 'williamdurand.fr' ], [ 21, 22, 80 ]);
+```
+
+**OS detection** and **Service Info** are disabled by default, if you want to
+enable them, use the `enableOsDetection()` and/or `enableServiceInfo()` methods:
+
+``` php
+$nmap
+    ->enableOsDetection()
+    ->scan([ 'williamdurand.fr' ]);
+
+$nmap
+    ->enableServiceInfo()
+    ->scan([ 'williamdurand.fr' ]);
+
+// Fluent interface!
+$nmap
+    ->enableOsDetection()
+    ->enableServiceInfo()
+    ->scan([ 'williamdurand.fr' ]);
+```
+
+Turn the **verbose mode** by using the `enableVerbose()` method:
+
+``` php
+$nmap
+    ->enableVerbose()
+    ->scan([ 'williamdurand.fr' ]);
+```
+
+For some reasons, you might want to disable port scan, that is why **Nmap**
+provides a `disablePortScan()` method.
+
+``` php
+$nmap
+    ->disablePortScan()
+    ->scan([ 'williamdurand.fr' ]);
 ```
 
 
