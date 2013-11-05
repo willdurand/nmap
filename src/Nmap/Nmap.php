@@ -76,8 +76,7 @@ class Nmap
 
         if (true === $this->disablePortScan) {
             $options[] = '-sn';
-        }
-        else {
+        } else {
             if (!empty($ports)) {
                 $options[] = '-p '.implode(',', $ports);
             }
