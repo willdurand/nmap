@@ -61,6 +61,13 @@ $nmap
     ->scan([ 'williamdurand.fr' ]);
 ```
 
+You can also disable the reverse DNS resolution with `disableReverseDNS()`:
+
+``` php
+$nmap
+    ->disableReverseDNS()
+    ->scan([ 'williamdurand.fr' ]);
+```
 
 Installation
 ------------
