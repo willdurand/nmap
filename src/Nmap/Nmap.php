@@ -31,6 +31,8 @@ class Nmap
 
     private $disablePortScan   = false;
 
+    private $disableReverseDNS = false;
+
     /**
      * @return Nmap
      */
@@ -78,6 +80,10 @@ class Nmap
             $options[] = '-sn';
         } elseif (!empty($ports)) {
             $options[] = '-p '.implode(',', $ports);
+        }
+
+        if (true === $this->disableReverseDNS) {
+            $options[] = '-n';
         }
 
         $options[] = '-oX';
@@ -140,6 +146,18 @@ class Nmap
     public function disablePortScan($disable = true)
     {
         $this->disablePortScan = $disable;
+
+        return $this;
+    }
+
+    /**
+     * @param boolean $disable
+     *
+     * @return Nmap
+     */
+    public function disableReverseDNS($disable = true)
+    {
+        $this->disableReverseDNS = $disable;
 
         return $this;
     }

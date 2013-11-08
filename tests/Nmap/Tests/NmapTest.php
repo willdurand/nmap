@@ -158,4 +158,22 @@ class NmapTest extends TestCase
             ->disablePortScan()
             ->scan(array('williamdurand.fr'));
     }
+
+    public function testScanWithoutReverseDNS()
+    {
+        $outputFile      = __DIR__ . '/Fixtures/test_ping_without_reverse_dns.xml';
+        $expectedCommand = sprintf("nmap -n -oX '%s' 'williamdurand.fr'", $outputFile);
+
+        $executor = $this->getMock('Nmap\Util\ProcessExecutor');
+        $executor
+            ->expects($this->once())
+            ->method('execute')
+            ->with($this->equalTo($expectedCommand))
+            ->will($this->returnValue(0));
+
+        $nmap  = new Nmap($executor, $outputFile);
+        $hosts = $nmap
+            ->disableReverseDNS()
+            ->scan(array('williamdurand.fr'));
+    }
 }
