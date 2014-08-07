@@ -176,4 +176,20 @@ class NmapTest extends TestCase
             ->disableReverseDNS()
             ->scan(array('williamdurand.fr'));
     }
+
+    public function testScanWithTreatHostsAsOnline() {
+        $outputFile = __DIR__ . '/Fixtures/test_scan_with_verbose.xml';
+        $expectedCommand = sprintf("nmap -Pn -oX '%s' 'williamdurand.fr'", $outputFile);
+
+        $executor = $this->getMock('Nmap\Util\ProcessExecutor');
+        $executor
+            ->expects($this->once())
+            ->method('execute')
+            ->with($this->equalTo($expectedCommand))
+            ->will($this->returnValue(0));
+
+        $nmap = new Nmap($executor, $outputFile);
+        $hosts = $nmap->treatHostsAsOnline()->scan(array('williamdurand.fr'));
+    }
+
 }

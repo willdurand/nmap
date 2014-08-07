@@ -33,6 +33,8 @@ class Nmap
 
     private $disableReverseDNS = false;
 
+    private $treatHostsAsOnline = false;
+
     /**
      * @return Nmap
      */
@@ -84,6 +86,10 @@ class Nmap
 
         if (true === $this->disableReverseDNS) {
             $options[] = '-n';
+        }
+
+        if (true == $this->treatHostsAsOnline) {
+            $options[] = '-Pn';
         }
 
         $options[] = '-oX';
@@ -158,6 +164,17 @@ class Nmap
     public function disableReverseDNS($disable = true)
     {
         $this->disableReverseDNS = $disable;
+
+        return $this;
+    }
+
+    /**
+     * @param boolean $disable
+     *
+     * @return Nmap
+     */
+    public function treatHostsAsOnline($disable = true) {
+        $this->treatHostsAsOnline = $disable;
 
         return $this;
     }
