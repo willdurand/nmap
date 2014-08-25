@@ -35,6 +35,8 @@ class Nmap
 
     private $treatHostsAsOnline = false;
 
+    private $executable;
+
     /**
      * @return Nmap
      */
@@ -46,11 +48,19 @@ class Nmap
     /**
      * @param ProcessExecutor $executor
      * @param string          $outputFile
+     * @param string          $executable
+     *
+     * @throws \InvalidArgumentException
      */
-    public function __construct(ProcessExecutor $executor = null, $outputFile = null)
+    public function __construct(ProcessExecutor $executor = null, $outputFile = null, $executable = 'nmap')
     {
         $this->executor   = $executor ?: new ProcessExecutor();
         $this->outputFile = $outputFile ?: sys_get_temp_dir() . '/output.xml';
+        $this->executable = $executable;
+
+        if ($executor->execute($this->executable)) {
+            throw new \InvalidArgumentException(sprintf('`%s` is not executable.', $this->executable));
+        }
     }
 
     /**
@@ -93,7 +103,8 @@ class Nmap
         }
 
         $options[] = '-oX';
-        $command   = sprintf('nmap %s %s %s',
+        $command   = sprintf('%s %s %s %s',
+            $this->executable,
             implode(' ', $options),
             ProcessUtils::escapeArgument($this->outputFile),
             $targets

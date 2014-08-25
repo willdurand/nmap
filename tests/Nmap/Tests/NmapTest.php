@@ -13,9 +13,9 @@ class NmapTest extends TestCase
         $outputFile      = __DIR__ . '/Fixtures/test_scan.xml';
         $expectedCommand = sprintf("nmap -oX '%s' 'williamdurand.fr'", $outputFile);
 
-        $executor = $this->getMock('Nmap\Util\ProcessExecutor');
+        $executor = $this->getProcessExecutorMock();
         $executor
-            ->expects($this->once())
+            ->expects($this->at(1))
             ->method('execute')
             ->with($this->equalTo($expectedCommand))
             ->will($this->returnValue(0));
@@ -53,9 +53,9 @@ class NmapTest extends TestCase
         $outputFile      = __DIR__ . '/Fixtures/test_scan_specifying_ports.xml';
         $expectedCommand = sprintf("nmap -p 21,22,80 -oX '%s' 'williamdurand.fr'", $outputFile);
 
-        $executor = $this->getMock('Nmap\Util\ProcessExecutor');
+        $executor = $this->getProcessExecutorMock();
         $executor
-            ->expects($this->once())
+            ->expects($this->at(1))
             ->method('execute')
             ->with($this->equalTo($expectedCommand))
             ->will($this->returnValue(0));
@@ -92,9 +92,9 @@ class NmapTest extends TestCase
         $outputFile      = __DIR__ . '/Fixtures/test_scan_with_os_detection.xml';
         $expectedCommand = sprintf("nmap -O -oX '%s' 'williamdurand.fr'", $outputFile);
 
-        $executor = $this->getMock('Nmap\Util\ProcessExecutor');
+        $executor = $this->getProcessExecutorMock();
         $executor
-            ->expects($this->once())
+            ->expects($this->at(1))
             ->method('execute')
             ->with($this->equalTo($expectedCommand))
             ->will($this->returnValue(0));
@@ -110,9 +110,9 @@ class NmapTest extends TestCase
         $outputFile      = __DIR__ . '/Fixtures/test_scan_with_service_info.xml';
         $expectedCommand = sprintf("nmap -sV -oX '%s' 'williamdurand.fr'", $outputFile);
 
-        $executor = $this->getMock('Nmap\Util\ProcessExecutor');
+        $executor = $this->getProcessExecutorMock();
         $executor
-            ->expects($this->once())
+            ->expects($this->at(1))
             ->method('execute')
             ->with($this->equalTo($expectedCommand))
             ->will($this->returnValue(0));
@@ -128,9 +128,9 @@ class NmapTest extends TestCase
         $outputFile      = __DIR__ . '/Fixtures/test_scan_with_verbose.xml';
         $expectedCommand = sprintf("nmap -v -oX '%s' 'williamdurand.fr'", $outputFile);
 
-        $executor = $this->getMock('Nmap\Util\ProcessExecutor');
+        $executor = $this->getProcessExecutorMock();
         $executor
-            ->expects($this->once())
+            ->expects($this->at(1))
             ->method('execute')
             ->with($this->equalTo($expectedCommand))
             ->will($this->returnValue(0));
@@ -146,9 +146,9 @@ class NmapTest extends TestCase
         $outputFile      = __DIR__ . '/Fixtures/test_ping_scan.xml';
         $expectedCommand = sprintf("nmap -sn -oX '%s' 'williamdurand.fr'", $outputFile);
 
-        $executor = $this->getMock('Nmap\Util\ProcessExecutor');
+        $executor = $this->getProcessExecutorMock();
         $executor
-            ->expects($this->once())
+            ->expects($this->at(1))
             ->method('execute')
             ->with($this->equalTo($expectedCommand))
             ->will($this->returnValue(0));
@@ -164,9 +164,9 @@ class NmapTest extends TestCase
         $outputFile      = __DIR__ . '/Fixtures/test_ping_without_reverse_dns.xml';
         $expectedCommand = sprintf("nmap -n -oX '%s' 'williamdurand.fr'", $outputFile);
 
-        $executor = $this->getMock('Nmap\Util\ProcessExecutor');
+        $executor = $this->getProcessExecutorMock();
         $executor
-            ->expects($this->once())
+            ->expects($this->at(1))
             ->method('execute')
             ->with($this->equalTo($expectedCommand))
             ->will($this->returnValue(0));
@@ -182,14 +182,42 @@ class NmapTest extends TestCase
         $outputFile = __DIR__ . '/Fixtures/test_scan_with_verbose.xml';
         $expectedCommand = sprintf("nmap -Pn -oX '%s' 'williamdurand.fr'", $outputFile);
 
-        $executor = $this->getMock('Nmap\Util\ProcessExecutor');
+        $executor = $this->getProcessExecutorMock();
         $executor
-            ->expects($this->once())
+            ->expects($this->at(1))
             ->method('execute')
             ->with($this->equalTo($expectedCommand))
             ->will($this->returnValue(0));
 
         $nmap = new Nmap($executor, $outputFile);
         $hosts = $nmap->treatHostsAsOnline()->scan(array('williamdurand.fr'));
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testExecutableNotExecutable()
+    {
+        $executor = $this->getMock('Nmap\Util\ProcessExecutor');
+        $executor
+            ->expects($this->once())
+            ->method('execute')
+            ->will($this->returnValue(1));
+
+        new Nmap($executor);
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject | \Nmap\Util\ProcessExecutor
+     */
+    private function getProcessExecutorMock()
+    {
+        $executor = $this->getMock('Nmap\Util\ProcessExecutor');
+        $executor
+            ->expects($this->at(0))
+            ->method('execute')
+            ->will($this->returnValue(0));
+
+        return $executor;
     }
 }
