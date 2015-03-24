@@ -231,7 +231,9 @@ class Nmap
                 (string) $port->attributes()->protocol,
                 (string) $port->state->attributes()->state,
                 new Service(
-                    (string) $port->service->attributes()->name
+                    (string) $port->service->attributes()->name,
+                    (string) $port->service->attributes()->product,
+                    (string) $port->service->attributes()->version
                 )
             );
         }

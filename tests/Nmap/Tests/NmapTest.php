@@ -121,6 +121,18 @@ class NmapTest extends TestCase
         $hosts = $nmap
             ->enableServiceInfo()
             ->scan(array('williamdurand.fr'));
+
+        $host = current($hosts);
+        $ports = $host->getPorts();
+
+        $service = $ports[0]->getService();
+        $this->assertEquals('ssh', $service->getName());
+        $this->assertEquals('OpenSSH', $service->getProduct());
+        $this->assertEquals('5.1p1 Debian 5github8', $service->getVersion());
+
+        $service = $ports[1]->getService();
+        $this->assertEquals('http', $service->getName());
+        $this->assertEquals('nginx', $service->getProduct());
     }
 
     public function testScanWithVerbose()
