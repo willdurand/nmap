@@ -38,14 +38,6 @@ class Address
     }
 
     /**
-     * @param string $address
-     */
-    public function setAddress($address)
-    {
-        $this->address = $address;
-    }
-
-    /**
      * @return string
      */
     public function getType()
@@ -54,26 +46,10 @@ class Address
     }
 
     /**
-     * @param string $type
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-    }
-
-    /**
      * @return string
      */
     public function getVendor()
     {
         return $this->vendor;
-    }
-
-    /**
-     * @param string $vendor
-     */
-    public function setVendor($vendor)
-    {
-        $this->vendor = $vendor;
     }
 }
