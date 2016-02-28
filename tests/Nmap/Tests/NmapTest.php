@@ -28,6 +28,7 @@ class NmapTest extends TestCase
         $host = current($hosts);
 
         $this->assertEquals('204.232.175.78', $host->getAddress()); // deprecated
+        $this->assertCount(2, $host->getAddresses());
         $this->assertEquals('204.232.175.78', $host->getIpv4Addresses()[0]->getAddress());
         $this->assertEquals(Address::TYPE_IPV4, $host->getIpv4Addresses()[0]->getType());
         $this->assertEmpty($host->getIpv4Addresses()[0]->getVendor());
@@ -74,6 +75,7 @@ class NmapTest extends TestCase
         $host = current($hosts);
 
         $this->assertEquals('204.232.175.78', $host->getAddress()); // deprecated
+        $this->assertCount(1, $host->getAddresses());
         $this->assertEquals('204.232.175.78', $host->getIpv4Addresses()[0]->getAddress());
         $this->assertEquals(Address::TYPE_IPV4, $host->getIpv4Addresses()[0]->getType());
         $this->assertEmpty($host->getIpv4Addresses()[0]->getVendor());
