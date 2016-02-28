@@ -199,7 +199,7 @@ class Nmap
         $hosts = array();
         foreach ($xml->host as $host) {
             $hosts[] = new Host(
-                (string) $host->address->attributes()->addr,
+                $this->parseAddresses($host),
                 (string) $host->status->attributes()->state,
                 isset($host->hostnames) ? $this->parseHostnames($host->hostnames->hostname) : array(),
                 isset($host->ports) ? $this->parsePorts($host->ports->port) : array()
@@ -239,5 +239,19 @@ class Nmap
         }
 
         return $ports;
+    }
+
+    private function parseAddresses(\SimpleXMLElement $host)
+    {
+        $addresses = array();
+        foreach ($host->xpath('./address') as $address) {
+            $addresses[] = new Address(
+                (string) $address->attributes()->addr,
+                (string) $address->attributes()->addrtype,
+                isset($address->attributes()->vendor) ? (string) $address->attributes()->vendor : ''
+            );
+        }
+
+        return $addresses;
     }
 }

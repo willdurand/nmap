@@ -2,6 +2,7 @@
 
 namespace Nmap\Tests;
 
+use Nmap\Address;
 use Nmap\Host;
 use Nmap\Nmap;
 use Nmap\Port;
@@ -26,7 +27,13 @@ class NmapTest extends TestCase
 
         $host = current($hosts);
 
-        $this->assertEquals('204.232.175.78', $host->getAddress());
+        $this->assertEquals('204.232.175.78', $host->getAddress()); // deprecated
+        $this->assertEquals('204.232.175.78', $host->getIpv4Addresses()[0]->getAddress());
+        $this->assertEquals(Address::TYPE_IPV4, $host->getIpv4Addresses()[0]->getType());
+        $this->assertEmpty($host->getIpv4Addresses()[0]->getVendor());
+        $this->assertEquals('00:C0:49:00:11:22', $host->getMacAddresses()[0]->getAddress());
+        $this->assertEquals(Address::TYPE_MAC, $host->getMacAddresses()[0]->getType());
+        $this->assertEquals('U.S. Robotics', $host->getMacAddresses()[0]->getVendor());
         $this->assertEquals(Host::STATE_UP, $host->getState());
 
         $hostnames = $host->getHostnames();
@@ -66,7 +73,10 @@ class NmapTest extends TestCase
 
         $host = current($hosts);
 
-        $this->assertEquals('204.232.175.78', $host->getAddress());
+        $this->assertEquals('204.232.175.78', $host->getAddress()); // deprecated
+        $this->assertEquals('204.232.175.78', $host->getIpv4Addresses()[0]->getAddress());
+        $this->assertEquals(Address::TYPE_IPV4, $host->getIpv4Addresses()[0]->getType());
+        $this->assertEmpty($host->getIpv4Addresses()[0]->getVendor());
         $this->assertEquals(Host::STATE_UP, $host->getState());
 
         $hostnames = $host->getHostnames();
