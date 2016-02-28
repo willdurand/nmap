@@ -42,7 +42,7 @@ class Host
      */
     public function getAddress()
     {
-        return $this->getIpv4Addresses()[0]->getAddress();
+        return current($this->getIpv4Addresses())->getAddress();
     }
 
     /**
