@@ -60,9 +60,9 @@ class Host
      */
     private function getAddressesByType($type)
     {
-        return array_values(array_filter($this->addresses, function (Address $address) use ($type) {
+        return array_filter($this->addresses, function (Address $address) use ($type) {
             return $address->getType() === $type;
-        }));
+        });
     }
 
     /**

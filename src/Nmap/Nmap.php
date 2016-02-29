@@ -245,7 +245,7 @@ class Nmap
     {
         $addresses = array();
         foreach ($host->xpath('./address') as $address) {
-            $addresses[] = new Address(
+            $addresses[(string) $address->attributes()->addr] = new Address(
                 (string) $address->attributes()->addr,
                 (string) $address->attributes()->addrtype,
                 isset($address->attributes()->vendor) ? (string) $address->attributes()->vendor : ''

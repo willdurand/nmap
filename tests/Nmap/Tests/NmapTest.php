@@ -30,9 +30,13 @@ class NmapTest extends TestCase
         $this->assertEquals('204.232.175.78', $host->getAddress()); // deprecated
         $this->assertCount(2, $host->getAddresses());
         $this->assertEquals('204.232.175.78', current($host->getIpv4Addresses())->getAddress());
+        $this->assertArrayHasKey('204.232.175.78', $host->getIpv4Addresses());
+        $this->assertArrayNotHasKey('00:C0:49:00:11:22', $host->getIpv4Addresses());
         $this->assertEquals(Address::TYPE_IPV4, current($host->getIpv4Addresses())->getType());
         $this->assertEmpty(current($host->getIpv4Addresses())->getVendor());
         $this->assertEquals('00:C0:49:00:11:22', current($host->getMacAddresses())->getAddress());
+        $this->assertArrayHasKey('00:C0:49:00:11:22', $host->getMacAddresses());
+        $this->assertArrayNotHasKey('204.232.175.78', $host->getMacAddresses());
         $this->assertEquals(Address::TYPE_MAC, current($host->getMacAddresses())->getType());
         $this->assertEquals('U.S. Robotics', current($host->getMacAddresses())->getVendor());
         $this->assertEquals(Host::STATE_UP, $host->getState());
