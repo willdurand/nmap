@@ -5,6 +5,7 @@
     <debugging level="0"/>
     <host starttime="1379937590" endtime="1379937601"><status state="up" reason="conn-refused" reason_ttl="0"/>
         <address addr="204.232.175.78" addrtype="ipv4"/>
+        <address addr="00:C0:49:00:11:22" addrtype="mac" vendor="U.S. Robotics"/>
         <hostnames>
             <hostname name="williamdurand.fr" type="user"/>
             <hostname name="pages.github.com" type="PTR"/>

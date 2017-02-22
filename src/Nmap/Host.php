@@ -19,7 +19,7 @@ class Host
 
     const STATE_DOWN = 'down';
 
-    private $address;
+    private $addresses;
 
     private $state;
 
@@ -27,9 +27,9 @@ class Host
 
     private $ports;
 
-    public function __construct($address, $state, array $hostnames = array(), array $ports = array())
+    public function __construct($addresses, $state, array $hostnames = array(), array $ports = array())
     {
-        $this->address   = $address;
+        $this->addresses = $addresses;
         $this->state     = $state;
         $this->hostnames = $hostnames;
         $this->ports     = $ports;
@@ -37,10 +37,48 @@ class Host
 
     /**
      * @return string
+     *
+     * @deprecated The Host::getAddress() method is deprecated since 0.4 version. Use Host::getIpv4Addresses() instead.
      */
     public function getAddress()
     {
-        return $this->address;
+        return current($this->getIpv4Addresses())->getAddress();
+    }
+
+    /**
+     * @return Address[]
+     */
+    public function getAddresses()
+    {
+        return $this->addresses;
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return Address[]
+     */
+    private function getAddressesByType($type)
+    {
+        return array_filter($this->addresses, function (Address $address) use ($type) {
+            return $address->getType() === $type;
+        });
+    }
+
+    /**
+     * @return Address[]
+     */
+    public function getIpv4Addresses()
+    {
+        return $this->getAddressesByType(Address::TYPE_IPV4);
+    }
+
+    /**
+     * @return Address[]
+     */
+    public function getMacAddresses()
+    {
+        return $this->getAddressesByType(Address::TYPE_MAC);
     }
 
     /**
