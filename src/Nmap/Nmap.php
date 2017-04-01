@@ -127,7 +127,7 @@ class Nmap
      *
      * @return Host[]
      */
-    public function scanByRange(string $startIp, string $endIp, $ports = array())
+    public function scanByRange($startIp, $endIp, $ports = array())
     {
         $startIp = ip2long($startIp);
         $endIp = ip2long($endIp);
