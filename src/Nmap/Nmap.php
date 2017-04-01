@@ -121,6 +121,27 @@ class Nmap
     }
 
     /**
+     * @param string $startIp
+     * @param string $endIp
+     * @param array $ports
+     *
+     * @return Host[]
+     */
+    public function scanByRange($startIp, $endIp, $ports = array())
+    {
+        $startIp = ip2long($startIp);
+        $endIp = ip2long($endIp);
+
+        $ipList = [];
+
+        for ($currentIp = $startIp; $currentIp <= $endIp; $currentIp++) {
+            $ipList[] = long2ip($currentIp);
+        }
+
+        return $this->scan($ipList, $ports);
+    }
+    
+    /**
      * @param boolean $enable
      *
      * @return Nmap

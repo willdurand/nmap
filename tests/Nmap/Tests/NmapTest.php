@@ -6,6 +6,7 @@ use Nmap\Address;
 use Nmap\Host;
 use Nmap\Nmap;
 use Nmap\Port;
+use Nmap\Util\ProcessExecutor;
 
 class NmapTest extends TestCase
 {
@@ -227,7 +228,7 @@ class NmapTest extends TestCase
      */
     public function testExecutableNotExecutable()
     {
-        $executor = $this->getMock('Nmap\Util\ProcessExecutor');
+        $executor = $this->createMock(ProcessExecutor::class);
         $executor
             ->expects($this->once())
             ->method('execute')
@@ -236,12 +237,35 @@ class NmapTest extends TestCase
         new Nmap($executor);
     }
 
+    public function testScanByIpRange()
+    {
+        $outputFile = __DIR__ . '/Fixtures/test_scan_by_ip_range.xml';
+        $expectedCommand =
+            sprintf(
+            "nmap -Pn -oX '%s' '192.168.1.1' '192.168.1.2' '192.168.1.3' '192.168.1.4' '192.168.1.5'"
+                , $outputFile
+            );
+
+        $startIp = '192.168.1.1';
+        $endIp = '192.168.1.5';
+
+        $executor = $this->getProcessExecutorMock();
+        $executor
+            ->expects($this->at(1))
+            ->method('execute')
+            ->with($this->equalTo($expectedCommand))
+            ->will($this->returnValue(0));
+
+        $nmap = new Nmap($executor, $outputFile);
+        $hosts = $nmap->treatHostsAsOnline()->scanByRange($startIp, $endIp);
+    }
+
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject | \Nmap\Util\ProcessExecutor
+     * @return \PHPUnit_Framework_MockObject_MockObject | ProcessExecutor
      */
     private function getProcessExecutorMock()
     {
-        $executor = $this->getMock('Nmap\Util\ProcessExecutor');
+        $executor = $this->createMock(ProcessExecutor::class);
         $executor
             ->expects($this->at(0))
             ->method('execute')
