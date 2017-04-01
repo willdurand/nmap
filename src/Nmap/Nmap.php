@@ -134,7 +134,7 @@ class Nmap
 
         $ipList = [];
 
-        for ($currentIp = $startIp; $currentIp < $endIp; $currentIp++) {
+        for ($currentIp = $startIp; $currentIp <= $endIp; $currentIp++) {
             $ipList[] = long2ip($currentIp);
         }
 
