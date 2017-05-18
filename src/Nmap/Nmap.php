@@ -35,6 +35,10 @@ class Nmap
 
     private $treatHostsAsOnline = false;
 
+    private $udpScan = false;
+
+    private $aggressiveMode = false;
+
     private $executable;
 
     /**
@@ -99,11 +103,20 @@ class Nmap
             $options[] = '-n';
         }
 
-        if (true == $this->treatHostsAsOnline) {
+        if (true === $this->treatHostsAsOnline) {
             $options[] = '-Pn';
         }
 
+        if (true === $this->udpScan) {
+            $options[] = '-sU';
+        }
+
+        if (true === $this->aggressiveMode) {
+            $options[] = '-A';
+        }
+
         $options[] = '-oX';
+
         $command   = sprintf('%s %s %s %s',
             $this->executable,
             implode(' ', $options),
@@ -188,6 +201,30 @@ class Nmap
     public function treatHostsAsOnline($disable = true)
     {
         $this->treatHostsAsOnline = $disable;
+
+        return $this;
+    }
+
+    /**
+     * @param boolean $disable
+     *
+     * @return Nmap
+     */
+    public function udpScan($disable = true)
+    {
+        $this->udpScan = $disable;
+
+        return $this;
+    }
+
+    /**
+     * @param boolean $disable
+     *
+     * @return Nmap
+     */
+    public function enableAggressiveMode($disable = true)
+    {
+        $this->aggressiveMode = $disable;
 
         return $this;
     }

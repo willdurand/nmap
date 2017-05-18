@@ -222,6 +222,38 @@ class NmapTest extends TestCase
         $hosts = $nmap->treatHostsAsOnline()->scan(array('williamdurand.fr'));
     }
 
+    public function testScanWithUDPMode()
+    {
+        $outputFile = __DIR__ . '/Fixtures/test_scan_with_udp.xml';
+        $expectedCommand = sprintf("nmap -sU -oX '%s' 'williamdurand.fr'", $outputFile);
+
+        $executor = $this->getProcessExecutorMock();
+        $executor
+            ->expects($this->at(1))
+            ->method('execute')
+            ->with($this->equalTo($expectedCommand))
+            ->will($this->returnValue(0));
+
+        $nmap = new Nmap($executor, $outputFile);
+        $hosts = $nmap->udpScan()->scan(array('williamdurand.fr'));
+    }
+
+    public function testScanWithAggressiveMode()
+    {
+        $outputFile = __DIR__ . '/Fixtures/test_scan_with_aggressive.xml';
+        $expectedCommand = sprintf("nmap -A -oX '%s' 'williamdurand.fr'", $outputFile);
+
+        $executor = $this->getProcessExecutorMock();
+        $executor
+            ->expects($this->at(1))
+            ->method('execute')
+            ->with($this->equalTo($expectedCommand))
+            ->will($this->returnValue(0));
+
+        $nmap = new Nmap($executor, $outputFile);
+        $hosts = $nmap->enableAggressiveMode()->scan(array('williamdurand.fr'));
+    }
+
     /**
      * @expectedException \InvalidArgumentException
      */
