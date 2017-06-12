@@ -52,14 +52,14 @@ class Nmap
      *
      * @throws \InvalidArgumentException
      */
-    public function __construct(ProcessExecutor $executor = null, $outputFile = null, $executable = 'nmap')
+    public function __construct(ProcessExecutor $executor = null, $outputFile = null, $executable = 'nmap', $timeout = 60)
     {
         $this->executor   = $executor ?: new ProcessExecutor();
         $this->outputFile = $outputFile ?: sys_get_temp_dir() . '/output.xml';
         $this->executable = $executable;
 
         // If executor returns anything else than 0 (success exit code), throw an exeption since $executable is not executable.
-        if ($this->executor->execute($this->executable.' -h') !== 0) {
+        if ($this->executor->execute($this->executable.' -h', $timeout) !== 0) {
             throw new \InvalidArgumentException(sprintf('`%s` is not executable.', $this->executable));
         }
     }
