@@ -22,9 +22,9 @@ class ProcessExecutor
      *
      * @return integer
      */
-    public function execute($command)
+    public function execute($command, $timeout)
     {
-        $process = new Process($command);
+        $process = new Process($command,NULL,NULL,NULL,$timeout);
         $process->run();
 
         if (!$process->isSuccessful()) {
