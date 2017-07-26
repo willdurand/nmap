@@ -19,12 +19,13 @@ class ProcessExecutor
 {
     /**
      * @param string $command The command to execute.
+     * @param int    $timeout The process timeout.
      *
      * @return integer
      */
-    public function execute($command)
+    public function execute($command, $timeout = 60)
     {
-        $process = new Process($command);
+        $process = new Process($command, null, null, null, $timeout);
         $process->run();
 
         if (!$process->isSuccessful()) {

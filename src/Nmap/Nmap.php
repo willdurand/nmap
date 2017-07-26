@@ -37,6 +37,8 @@ class Nmap
 
     private $executable;
 
+    private $timeout = 60;
+
     /**
      * @return Nmap
      */
@@ -49,6 +51,7 @@ class Nmap
      * @param ProcessExecutor $executor
      * @param string          $outputFile
      * @param string          $executable
+     * @param int             $timeout
      *
      * @throws \InvalidArgumentException
      */
@@ -111,7 +114,7 @@ class Nmap
             $targets
         );
 
-        $this->executor->execute($command);
+        $this->executor->execute($command, $this->timeout);
 
         if (!file_exists($this->outputFile)) {
             throw new \RuntimeException(sprintf('Output file not found ("%s")', $this->outputFile));
@@ -188,6 +191,18 @@ class Nmap
     public function treatHostsAsOnline($disable = true)
     {
         $this->treatHostsAsOnline = $disable;
+
+        return $this;
+    }
+
+    /**
+     * @param $timeout
+     *
+     * @return Nmap
+     */
+    public function setTimeout($timeout)
+    {
+        $this->timeout = $timeout;
 
         return $this;
     }
