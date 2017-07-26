@@ -70,10 +70,11 @@ class Nmap
     /**
      * @param array $targets
      * @param array $ports
+     * @param array $extraOptions
      *
      * @return Host[]
      */
-    public function scan(array $targets, array $ports = array())
+    public function scan(array $targets, array $ports = array(), array $extraOptions = array())
     {
         $targets = implode(' ', array_map(function ($target) {
             return ProcessUtils::escapeArgument($target);
@@ -106,7 +107,13 @@ class Nmap
             $options[] = '-Pn';
         }
 
+        if( !empty($extraOptions) ) {
+
+            $options = array_merge($options, $extraOptions);
+        }
+
         $options[] = '-oX';
+
         $command   = sprintf('%s %s %s %s',
             $this->executable,
             implode(' ', $options),
