@@ -222,6 +222,37 @@ class NmapTest extends TestCase
         $hosts = $nmap->treatHostsAsOnline()->scan(array('williamdurand.fr'));
     }
 
+    public function testScanWithDefaultTimeout()
+    {
+        $outputFile = __DIR__ . '/Fixtures/test_scan.xml';
+
+        $executor = $this->getProcessExecutorMock();
+        $executor
+            ->expects($this->at(1))
+            ->method('execute')
+            ->with($this->anything(), $this->equalTo(60))
+            ->will($this->returnValue(0));
+
+        $nmap = new Nmap($executor, $outputFile);
+        $nmap->scan(array('williamdurand.fr'));
+    }
+
+    public function testScanWithUserTimeout()
+    {
+        $outputFile = __DIR__ . '/Fixtures/test_scan.xml';
+        $timeout = 123;
+
+        $executor = $this->getProcessExecutorMock();
+        $executor
+            ->expects($this->at(1))
+            ->method('execute')
+            ->with($this->anything(), $this->equalTo($timeout))
+            ->will($this->returnValue(0));
+
+        $nmap = new Nmap($executor, $outputFile);
+        $nmap->setTimeout($timeout)->scan(array('williamdurand.fr'));
+    }
+
     /**
      * @expectedException \InvalidArgumentException
      */

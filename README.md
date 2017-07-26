@@ -69,6 +69,14 @@ $nmap
     ->scan([ 'williamdurand.fr' ]);
 ```
 
+You can define the process timeout (default to 60 seconds) with `setTimeout()`:
+
+``` php
+$nmap
+    ->setTimeout(120)
+    ->scan([ 'williamdurand.fr' ]);
+```
+
 Installation
 ------------
 
