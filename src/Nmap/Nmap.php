@@ -39,6 +39,8 @@ class Nmap
 
     private $timeout = 60;
 
+    private $extraOptions = [];
+
     /**
      * @return Nmap
      */
@@ -79,7 +81,7 @@ class Nmap
             return ProcessUtils::escapeArgument($target);
         }, $targets));
 
-        $options = array();
+        $options = $this->extraOptions;
         if (true === $this->enableOsDetection) {
             $options[] = '-O';
         }
@@ -145,6 +147,14 @@ class Nmap
         $this->enableServiceInfo = $enable;
 
         return $this;
+    }
+
+    /**
+     * Extra options to pass to NMAP (e.g. [ "-e eth0", "--min-hostgroup 4" ] )
+     * @param array $options
+     */
+    public function setExtraOptions(array $options) {
+        $this->extraOptions = $options;
     }
 
     /**
