@@ -2,6 +2,7 @@
 
 namespace Nmap\Tests;
 
+use Mockery as m;
 use Nmap\Address;
 use Nmap\Host;
 use Nmap\Nmap;
@@ -9,9 +10,15 @@ use Nmap\Port;
 
 class NmapTest extends TestCase
 {
+    public function tearDown()
+    {
+        m::close();
+        parent::tearDown();
+    }
+
     public function testScan()
     {
-        $outputFile      = __DIR__ . '/Fixtures/test_scan.xml';
+        $outputFile = __DIR__ . '/Fixtures/test_scan.xml';
         $expectedCommand = sprintf("nmap -oX '%s' 'williamdurand.fr'", $outputFile);
 
         $executor = $this->getProcessExecutorMock();
@@ -21,7 +28,7 @@ class NmapTest extends TestCase
             ->with($this->equalTo($expectedCommand))
             ->will($this->returnValue(0));
 
-        $nmap  = new Nmap($executor, $outputFile);
+        $nmap = new Nmap($executor, $outputFile);
         $hosts = $nmap->scan(array('williamdurand.fr'));
         $this->assertCount(1, $hosts);
 
@@ -62,7 +69,7 @@ class NmapTest extends TestCase
 
     public function testScanSpecifyingPorts()
     {
-        $outputFile      = __DIR__ . '/Fixtures/test_scan_specifying_ports.xml';
+        $outputFile = __DIR__ . '/Fixtures/test_scan_specifying_ports.xml';
         $expectedCommand = sprintf("nmap -p 21,22,80 -oX '%s' 'williamdurand.fr'", $outputFile);
 
         $executor = $this->getProcessExecutorMock();
@@ -72,8 +79,8 @@ class NmapTest extends TestCase
             ->with($this->equalTo($expectedCommand))
             ->will($this->returnValue(0));
 
-        $nmap  = new Nmap($executor, $outputFile);
-        $hosts = $nmap->scan(array('williamdurand.fr'), array(21,22,80));
+        $nmap = new Nmap($executor, $outputFile);
+        $hosts = $nmap->scan(array('williamdurand.fr'), array(21, 22, 80));
         $this->assertCount(1, $hosts);
 
         $host = current($hosts);
@@ -106,7 +113,7 @@ class NmapTest extends TestCase
 
     public function testScanWithOsDetection()
     {
-        $outputFile      = __DIR__ . '/Fixtures/test_scan_with_os_detection.xml';
+        $outputFile = __DIR__ . '/Fixtures/test_scan_with_os_detection.xml';
         $expectedCommand = sprintf("nmap -O -oX '%s' 'williamdurand.fr'", $outputFile);
 
         $executor = $this->getProcessExecutorMock();
@@ -116,7 +123,7 @@ class NmapTest extends TestCase
             ->with($this->equalTo($expectedCommand))
             ->will($this->returnValue(0));
 
-        $nmap  = new Nmap($executor, $outputFile);
+        $nmap = new Nmap($executor, $outputFile);
         $hosts = $nmap
             ->enableOsDetection()
             ->scan(array('williamdurand.fr'));
@@ -124,7 +131,7 @@ class NmapTest extends TestCase
 
     public function testScanWithServiceInfo()
     {
-        $outputFile      = __DIR__ . '/Fixtures/test_scan_with_service_info.xml';
+        $outputFile = __DIR__ . '/Fixtures/test_scan_with_service_info.xml';
         $expectedCommand = sprintf("nmap -sV -oX '%s' 'williamdurand.fr'", $outputFile);
 
         $executor = $this->getProcessExecutorMock();
@@ -134,7 +141,7 @@ class NmapTest extends TestCase
             ->with($this->equalTo($expectedCommand))
             ->will($this->returnValue(0));
 
-        $nmap  = new Nmap($executor, $outputFile);
+        $nmap = new Nmap($executor, $outputFile);
         $hosts = $nmap
             ->enableServiceInfo()
             ->scan(array('williamdurand.fr'));
@@ -154,7 +161,7 @@ class NmapTest extends TestCase
 
     public function testScanWithVerbose()
     {
-        $outputFile      = __DIR__ . '/Fixtures/test_scan_with_verbose.xml';
+        $outputFile = __DIR__ . '/Fixtures/test_scan_with_verbose.xml';
         $expectedCommand = sprintf("nmap -v -oX '%s' 'williamdurand.fr'", $outputFile);
 
         $executor = $this->getProcessExecutorMock();
@@ -164,7 +171,7 @@ class NmapTest extends TestCase
             ->with($this->equalTo($expectedCommand))
             ->will($this->returnValue(0));
 
-        $nmap  = new Nmap($executor, $outputFile);
+        $nmap = new Nmap($executor, $outputFile);
         $hosts = $nmap
             ->enableVerbose()
             ->scan(array('williamdurand.fr'));
@@ -172,7 +179,7 @@ class NmapTest extends TestCase
 
     public function testPingScan()
     {
-        $outputFile      = __DIR__ . '/Fixtures/test_ping_scan.xml';
+        $outputFile = __DIR__ . '/Fixtures/test_ping_scan.xml';
         $expectedCommand = sprintf("nmap -sn -oX '%s' 'williamdurand.fr'", $outputFile);
 
         $executor = $this->getProcessExecutorMock();
@@ -182,7 +189,7 @@ class NmapTest extends TestCase
             ->with($this->equalTo($expectedCommand))
             ->will($this->returnValue(0));
 
-        $nmap  = new Nmap($executor, $outputFile);
+        $nmap = new Nmap($executor, $outputFile);
         $hosts = $nmap
             ->disablePortScan()
             ->scan(array('williamdurand.fr'));
@@ -190,7 +197,7 @@ class NmapTest extends TestCase
 
     public function testScanWithoutReverseDNS()
     {
-        $outputFile      = __DIR__ . '/Fixtures/test_ping_without_reverse_dns.xml';
+        $outputFile = __DIR__ . '/Fixtures/test_ping_without_reverse_dns.xml';
         $expectedCommand = sprintf("nmap -n -oX '%s' 'williamdurand.fr'", $outputFile);
 
         $executor = $this->getProcessExecutorMock();
@@ -200,7 +207,7 @@ class NmapTest extends TestCase
             ->with($this->equalTo($expectedCommand))
             ->will($this->returnValue(0));
 
-        $nmap  = new Nmap($executor, $outputFile);
+        $nmap = new Nmap($executor, $outputFile);
         $hosts = $nmap
             ->disableReverseDNS()
             ->scan(array('williamdurand.fr'));
@@ -265,6 +272,27 @@ class NmapTest extends TestCase
             ->will($this->returnValue(1));
 
         new Nmap($executor);
+    }
+
+    public function testRawOptions()
+    {
+        $mockExecutor = m::mock(\Nmap\Util\ProcessExecutor::class);
+        $mockExecutor->shouldReceive('execute')->once()->withArgs(function ($command) {
+            $this->assertEquals('nmap -h', $command);
+            return true;
+        })->andReturn(0);
+
+        $mockExecutor->shouldReceive('execute')->once()->withArgs(function ($command, $timeout = 60) {
+            // Passing [ -e eth0, --min-hostgroup 3 ] ... should produce a command string a bit like ...
+            $this->assertRegExp("/^nmap -e eth0 --min-hostgroup 3.*127\.0\.0\.1'$/", $command);
+            return true;
+        })->andReturn(0);
+
+        $nmap = new Nmap($mockExecutor, dirname(__FILE__) . '/Fixtures/test_extra_options.xml');
+        $nmap->setExtraOptions(['-e eth0', '--min-hostgroup 3']);
+        $output = $nmap->scan(['127.0.0.1']);
+
+        $this->assertNotEmpty($output);
     }
 
     /**
