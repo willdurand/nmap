@@ -15,8 +15,8 @@ namespace Nmap;
  */
 class Address
 {
-    CONST TYPE_IPV4 = 'ipv4';
-    CONST TYPE_MAC = 'mac';
+    const TYPE_IPV4 = 'ipv4';
+    const TYPE_MAC = 'mac';
 
     private $address;
     private $type;

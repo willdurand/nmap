@@ -11,7 +11,6 @@
 namespace Nmap;
 
 use Nmap\Util\ProcessExecutor;
-use Symfony\Component\Process\ProcessUtils;
 
 /**
  * @author William Durand <william.durand1@gmail.com>
@@ -76,7 +75,7 @@ class Nmap
     public function scan(array $targets, array $ports = array())
     {
         $targets = implode(' ', array_map(function ($target) {
-            return ProcessUtils::escapeArgument($target);
+            return $target;
         }, $targets));
 
         $options = array();
@@ -107,10 +106,11 @@ class Nmap
         }
 
         $options[] = '-oX';
-        $command   = sprintf('%s %s %s %s',
+        $command   = sprintf(
+            "%s %s '%s' '%s'",
             $this->executable,
             implode(' ', $options),
-            ProcessUtils::escapeArgument($this->outputFile),
+            $this->outputFile,
             $targets
         );
 
