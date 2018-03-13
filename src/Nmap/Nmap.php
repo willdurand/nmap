@@ -58,7 +58,7 @@ class Nmap
     public function __construct(ProcessExecutor $executor = null, $outputFile = null, $executable = 'nmap')
     {
         $this->executor   = $executor ?: new ProcessExecutor();
-        $this->outputFile = $outputFile ?: sys_get_temp_dir() . '/output.xml';
+        $this->outputFile = $outputFile ?: tempnam(sys_get_temp_dir(), 'nmap-scan-output.xml');
         $this->executable = $executable;
 
         // If executor returns anything else than 0 (success exit code), throw an exeption since $executable is not executable.
