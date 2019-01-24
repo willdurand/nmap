@@ -76,6 +76,12 @@ $nmap
     ->scan([ 'williamdurand.fr' ]);
 ```
 
+You can parse an existing Nmap XML output file with `parseOutputFile()`:
+
+``` php
+$nmap->parseOutputFile($xmlFile);
+```
+
 Installation
 ------------
 
