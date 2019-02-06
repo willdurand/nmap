@@ -9,11 +9,13 @@
         }
     ],
     "require": {
-        "php": ">=5.3.0",
+        "php": ">=5.6.0",
         "symfony/process": "~2.0|~3.0|~4.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "~3.7"
+        "phpunit/phpunit": "~5",
+        "vimeo/psalm": "*",
+        "mockery/mockery": "*"
     },
     "autoload": {
         "psr-0": { "Nmap": "src/" }

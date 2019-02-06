@@ -61,7 +61,7 @@ class Nmap
         $this->executable = $executable;
 
         // If executor returns anything else than 0 (success exit code), throw an exeption since $executable is not executable.
-        if ($this->executor->execute($this->executable.' -h') !== 0) {
+        if ($this->executor->execute(array($this->executable, ' -h')) !== 0) {
             throw new \InvalidArgumentException(sprintf('`%s` is not executable.', $this->executable));
         }
     }
@@ -74,10 +74,6 @@ class Nmap
      */
     public function scan(array $targets, array $ports = array())
     {
-        $targets = implode(' ', array_map(function ($target) {
-            return $target;
-        }, $targets));
-
         $options = array();
         if (true === $this->enableOsDetection) {
             $options[] = '-O';
@@ -106,13 +102,14 @@ class Nmap
         }
 
         $options[] = '-oX';
-        $command   = sprintf(
-            "%s %s '%s' '%s'",
+
+        $command = array(
             $this->executable,
-            implode(' ', $options),
-            $this->outputFile,
-            $targets
         );
+
+        $command = array_merge($command, $options);
+        $command[] = $this->outputFile;
+        $command = array_merge($command, $targets);
 
         $this->executor->execute($command, $this->timeout);
 
@@ -260,10 +257,14 @@ class Nmap
     {
         $addresses = array();
         foreach ($host->xpath('./address') as $address) {
-            $addresses[(string) $address->attributes()->addr] = new Address(
-                (string) $address->attributes()->addr,
-                (string) $address->attributes()->addrtype,
-                isset($address->attributes()->vendor) ? (string) $address->attributes()->vendor : ''
+            $attributes = $address->attributes();
+            if (is_null($attributes)) {
+                continue;
+            }
+            $addresses[(string)$attributes->addr] = new Address(
+                (string)$attributes->addr,
+                (string)$attributes->addrtype,
+                isset($attributes->vendor) ? (string)$attributes->vendor : ''
             );
         }
 

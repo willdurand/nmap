@@ -18,12 +18,12 @@ use Symfony\Component\Process\Process;
 class ProcessExecutor
 {
     /**
-     * @param string $command The command to execute.
-     * @param int    $timeout The process timeout.
+     * @param array $command The command to execute.
+     * @param int $timeout The process timeout.
      *
      * @return integer
      */
-    public function execute($command, $timeout = 60)
+    public function execute(array $command, $timeout = 60)
     {
         $process = new Process($command, null, null, null, $timeout);
         $process->run();
@@ -36,6 +36,9 @@ class ProcessExecutor
             ));
         }
 
-        return $process->getExitCode();
+        $retval = $process->getExitCode();
+
+        return (int)$retval;
+
     }
 }
