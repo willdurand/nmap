@@ -15,6 +15,7 @@
     "require-dev": {
         "phpunit/phpunit": "~5",
         "vimeo/psalm": "*",
+        "jakub-onderka/php-parallel-lint":"*",
         "mockery/mockery": "*"
     },
     "autoload": {
@@ -22,5 +23,16 @@
     },
     "config": {
         "bin-dir": "bin"
+    },
+    "scripts": {
+        "lint": "bin/parallel-lint src",
+        "psalm": "bin/psalm --show-info=false",
+        "phpunit": "bin/phpunit",
+        "build" : [
+            "@lint",
+            "@psalm",
+            "@phpunit"
+        ]
     }
+
 }
