@@ -1,5 +1,5 @@
 {
-    "name": "DavidGoodwin/nmap",
+    "name": "palepurple/nmap",
     "description": "nmap is a PHP wrapper for Nmap, a free security scanner for network exploration.",
     "license": "MIT",
     "authors": [
