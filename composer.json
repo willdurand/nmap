@@ -1,11 +1,15 @@
 {
-    "name": "willdurand/nmap",
+    "name": "DavidGoodwin/nmap",
     "description": "nmap is a PHP wrapper for Nmap, a free security scanner for network exploration.",
     "license": "MIT",
     "authors": [
         {
             "name": "William DURAND",
             "email": "william.durand1@gmail.com"
+        },
+        {
+            "name": "David Goodwin",
+            "email": "david+nmap-php@codepoets.co.uk"
         }
     ],
     "require": {
