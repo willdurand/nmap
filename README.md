@@ -85,7 +85,7 @@ The recommended way to install nmap is through
 ``` json
 {
     "require": {
-        "DavidGoodwin/nmap": "^1.0"
+        "palepurple/nmap": "^1.0"
     }
 }
 ```
