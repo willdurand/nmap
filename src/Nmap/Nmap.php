@@ -26,9 +26,9 @@ class Nmap
 
     private $enableServiceInfo = false;
 
-    private $enableVerbose     = false;
+    private $enableVerbose = false;
 
-    private $disablePortScan   = false;
+    private $disablePortScan = false;
 
     private $disableReverseDNS = false;
 
@@ -37,6 +37,8 @@ class Nmap
     private $executable;
 
     private $timeout = 60;
+
+    private $extraOptions = [];
 
     /**
      * @return Nmap
@@ -48,15 +50,15 @@ class Nmap
 
     /**
      * @param ProcessExecutor $executor
-     * @param string          $outputFile
-     * @param string          $executable
-     * @param int             $timeout
+     * @param string $outputFile
+     * @param string $executable
+     * @param int $timeout
      *
      * @throws \InvalidArgumentException
      */
     public function __construct(ProcessExecutor $executor = null, $outputFile = null, $executable = 'nmap')
     {
-        $this->executor   = $executor ?: new ProcessExecutor();
+        $this->executor = $executor ?: new ProcessExecutor();
         $this->outputFile = $outputFile ?: tempnam(sys_get_temp_dir(), 'nmap-scan-output.xml');
         $this->executable = $executable;
 
@@ -67,14 +69,24 @@ class Nmap
     }
 
     /**
+     * @param array $options
+     * @return $this
+     */
+    public function setExtraOptions(array $options)
+    {
+        $this->extraOptions = $options;
+        return $this;
+    }
+
+    /**
      * @param array $targets
      * @param array $ports
-     *
-     * @return Host[]
+     * @return array - implode with ' ' to get a command line string.
      */
-    public function scan(array $targets, array $ports = array())
+    public function buildCommand(array $targets, array $ports = array())
     {
-        $options = array();
+        $options = $this->extraOptions;
+
         if (true === $this->enableOsDetection) {
             $options[] = '-O';
         }
@@ -90,7 +102,7 @@ class Nmap
         if (true === $this->disablePortScan) {
             $options[] = '-sn';
         } elseif (!empty($ports)) {
-            $options[] = '-p '.implode(',', $ports);
+            $options[] = '-p ' . implode(',', $ports);
         }
 
         if (true === $this->disableReverseDNS) {
@@ -102,14 +114,29 @@ class Nmap
         }
 
         $options[] = '-oX';
+        $options[] = $this->outputFile;
 
         $command = array(
             $this->executable,
         );
 
-        $command = array_merge($command, $options);
-        $command[] = $this->outputFile;
-        $command = array_merge($command, $targets);
+        $command = array_merge($command, $options, $targets);
+
+        return $command;
+    }
+
+
+    /**
+     * @param array $targets
+     * @param array $ports
+     *
+     * @return Host[]
+     */
+    public function scan(array $targets, array $ports = array())
+    {
+
+        $command = $this->buildCommand($targets, $ports);
+
 
         $this->executor->execute($command, $this->timeout);
 
@@ -117,7 +144,7 @@ class Nmap
             throw new \RuntimeException(sprintf('Output file not found ("%s")', $this->outputFile));
         }
 
-        return $this->parseOutputFile($this->outputFile);
+        return XmlOutputParser::parseOutputFile($this->outputFile);
     }
 
     /**
@@ -202,72 +229,5 @@ class Nmap
         $this->timeout = $timeout;
 
         return $this;
-    }
-
-    private function parseOutputFile($xmlFile)
-    {
-        $xml = simplexml_load_file($xmlFile);
-
-        $hosts = array();
-        foreach ($xml->host as $host) {
-            $hosts[] = new Host(
-                $this->parseAddresses($host),
-                (string) $host->status->attributes()->state,
-                isset($host->hostnames) ? $this->parseHostnames($host->hostnames->hostname) : array(),
-                isset($host->ports) ? $this->parsePorts($host->ports->port) : array()
-            );
-        }
-
-        return $hosts;
-    }
-
-    private function parseHostnames(\SimpleXMLElement $xmlHostnames)
-    {
-        $hostnames = array();
-        foreach ($xmlHostnames as $hostname) {
-            $hostnames[] = new Hostname(
-                (string) $hostname->attributes()->name,
-                (string) $hostname->attributes()->type
-            );
-        }
-
-        return $hostnames;
-    }
-
-    private function parsePorts(\SimpleXMLElement $xmlPorts)
-    {
-        $ports = array();
-        foreach ($xmlPorts as $port) {
-            $ports[] = new Port(
-                (string) $port->attributes()->portid,
-                (string) $port->attributes()->protocol,
-                (string) $port->state->attributes()->state,
-                new Service(
-                    (string) $port->service->attributes()->name,
-                    (string) $port->service->attributes()->product,
-                    (string) $port->service->attributes()->version
-                )
-            );
-        }
-
-        return $ports;
-    }
-
-    private function parseAddresses(\SimpleXMLElement $host)
-    {
-        $addresses = array();
-        foreach ($host->xpath('./address') as $address) {
-            $attributes = $address->attributes();
-            if (is_null($attributes)) {
-                continue;
-            }
-            $addresses[(string)$attributes->addr] = new Address(
-                (string)$attributes->addr,
-                (string)$attributes->addrtype,
-                isset($attributes->vendor) ? (string)$attributes->vendor : ''
-            );
-        }
-
-        return $addresses;
     }
 }
