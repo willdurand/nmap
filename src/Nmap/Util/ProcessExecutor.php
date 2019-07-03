@@ -31,7 +31,7 @@ class ProcessExecutor
         if (!$process->isSuccessful()) {
             throw new \RuntimeException(sprintf(
                 'Failed to execute "%s"' . PHP_EOL . '%s',
-                $command,
+                implode(' ', $command),
                 $process->getErrorOutput()
             ));
         }
