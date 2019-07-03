@@ -50,18 +50,30 @@ class XmlOutputParser
      */
     public static function parsePorts(\SimpleXMLElement $xmlPorts)
     {
+        /**
+         *
+         */
         $ports = array();
         foreach ($xmlPorts as $port) {
+
+            $name = $product = $version = null;
+
+            if ($port->service) {
+                $name = (string)$port->service->attributes()->name;
+                $product = (string)$port->service->attributes()->product;
+                $version = $port->service->attributes()->version;
+            }
+
+            $service = new Service(
+                $name, $product, $version);
+
             $ports[] = new Port(
                 (string)$port->attributes()->portid,
                 (string)$port->attributes()->protocol,
                 (string)$port->state->attributes()->state,
-                new Service(
-                    (string)$port->service->attributes()->name,
-                    (string)$port->service->attributes()->product,
-                    (string)$port->service->attributes()->version
-                )
-            );
+                $service);
+
+
         }
 
         return $ports;

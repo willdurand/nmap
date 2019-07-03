@@ -28,7 +28,6 @@
             </port>
             <port protocol="tcp" portid="443">
                 <state state="closed" reason="conn-refused" reason_ttl="0"/>
-                <service name="https" method="table" conf="3"/>
             </port>
             <port protocol="tcp" portid="1720">
                 <state state="open" reason="syn-ack" reason_ttl="0"/>
