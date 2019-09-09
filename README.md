@@ -1,8 +1,7 @@
 nmap
 ====
 
-**nmap** is a PHP wrapper for [Nmap](http://nmap.org/), a free security scanner
-for network exploration.
+**nmap** is a PHP wrapper for [Nmap](http://nmap.org/), a free security scanner for network exploration.
 
 [![Build Status](https://travis-ci.org/willdurand/nmap.svg?branch=master)](https://travis-ci.org/willdurand/nmap)
 
@@ -82,7 +81,7 @@ Installation
 The recommended way to install nmap is through
 [Composer](http://getcomposer.org/):
 
-``` json
+```json
 {
     "require": {
         "willdurand/nmap": "@stable"
@@ -90,6 +89,9 @@ The recommended way to install nmap is through
 }
 ```
 
+Or:
+
+`composer require willdurand/nmap`
 
 **Protip:** you should browse the
 [`willdurand/nmap`](https://packagist.org/packages/willdurand/nmap)
