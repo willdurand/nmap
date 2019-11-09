@@ -34,6 +34,8 @@ class Nmap
 
     private $treatHostsAsOnline = false;
 
+    private $enableArpPing      = false;
+
     private $executable;
 
     private $timeout = 60;
@@ -105,6 +107,10 @@ class Nmap
             $options[] = '-Pn';
         }
 
+        if (true === $this->enableArpPing) {
+            $options[] = '-PR';
+        }
+
         $options[] = '-oX';
         $command   = sprintf(
             "%s %s '%s' '%s'",
@@ -155,6 +161,18 @@ class Nmap
     public function enableVerbose($enable = true)
     {
         $this->enableVerbose = $enable;
+
+        return $this;
+    }
+
+    /**
+     * @param boolean $enable
+     *
+     * @return Nmap
+     */
+    public function enableArpPing($enable = true)
+    {
+        $this->enableArpPing = $enable;
 
         return $this;
     }

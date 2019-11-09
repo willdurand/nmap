@@ -222,6 +222,22 @@ class NmapTest extends TestCase
         $hosts = $nmap->treatHostsAsOnline()->scan(array('williamdurand.fr'));
     }
 
+    public function testScanWithEnableArpPing()
+    {
+        $outputFile = __DIR__ . '/Fixtures/test_scan.xml';
+        $expectedCommand = sprintf("nmap -PR -oX '%s' 'williamdurand.fr'", $outputFile);
+
+        $executor = $this->getProcessExecutorMock();
+        $executor
+            ->expects($this->at(1))
+            ->method('execute')
+            ->with($this->equalTo($expectedCommand))
+            ->will($this->returnValue(0));
+
+        $nmap = new Nmap($executor, $outputFile);
+        $hosts = $nmap->enableArpPing()->scan(array('williamdurand.fr'));
+    }
+
     public function testScanWithDefaultTimeout()
     {
         $outputFile = __DIR__ . '/Fixtures/test_scan.xml';
