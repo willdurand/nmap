@@ -81,10 +81,14 @@ Installation
 The recommended way to install nmap is through
 [Composer](http://getcomposer.org/):
 
+For PHP 7.2 and above, use version 2.x
+
+For PHP 5.6 and above, use version 1.x
+
 ``` json
 {
     "require": {
-        "palepurple/nmap": "^1.0"
+        "palepurple/nmap": "^2.0"
     }
 }
 ```
