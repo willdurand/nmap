@@ -1,6 +1,6 @@
 {
     "name": "palepurple/nmap",
-    "description": "nmap is a PHP wrapper for Nmap, a free security scanner for network exploration.",
+    "description": "nmap is a PHP wrapper for Nmap, a free security scanner for network exploration. This is (mostly) a fork of willdurand/nmap with PHP 7 and vimeo/psalm static analysis improvements.",
     "license": "MIT",
     "authors": [
         {
