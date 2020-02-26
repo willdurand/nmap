@@ -19,18 +19,18 @@ class Hostname
 
     private $type;
 
-    public function __construct($name, $type)
+    public function __construct(string $name, string $type)
     {
         $this->name = $name;
         $this->type = $type;
     }
 
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
 
-    public function getType()
+    public function getType() : string
     {
         return $this->type;
     }

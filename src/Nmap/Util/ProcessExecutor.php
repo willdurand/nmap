@@ -17,13 +17,8 @@ use Symfony\Component\Process\Process;
  */
 class ProcessExecutor
 {
-    /**
-     * @param array $command The command to execute.
-     * @param int $timeout The process timeout.
-     *
-     * @return integer
-     */
-    public function execute(array $command, $timeout = 60)
+
+    public function execute(array $command, int $timeout = 60) : int
     {
         $process = new Process($command, null, null, null, $timeout);
         $process->run();

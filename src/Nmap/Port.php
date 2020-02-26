@@ -27,7 +27,7 @@ class Port
 
     private $service;
 
-    public function __construct($number, $protocol, $state, Service $service)
+    public function __construct(int $number, string $protocol, string $state, Service $service)
     {
         $this->number   = (int) $number;
         $this->protocol = $protocol;
@@ -52,25 +52,20 @@ class Port
     }
 
     /**
-     * @return string
+     * @return string one of self::STATE_OPEN or STATE_CLOSED
      */
     public function getState()
     {
         return $this->state;
     }
 
-    /**
-     * @return boolean
-     */
-    public function isOpen()
+
+    public function isOpen() : bool
     {
         return self::STATE_OPEN === $this->state;
     }
 
-    /**
-     * @return boolean
-     */
-    public function isClosed()
+    public function isClosed() : bool
     {
         return self::STATE_CLOSED === $this->state;
     }
@@ -78,7 +73,7 @@ class Port
     /**
      * @return Service
      */
-    public function getService()
+    public function getService() : Service
     {
         return $this->service;
     }

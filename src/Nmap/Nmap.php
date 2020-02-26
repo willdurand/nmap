@@ -43,7 +43,7 @@ class Nmap
     /**
      * @return Nmap
      */
-    public static function create()
+    public static function create(): self
     {
         return new static();
     }
@@ -56,7 +56,7 @@ class Nmap
      *
      * @throws \InvalidArgumentException
      */
-    public function __construct(ProcessExecutor $executor = null, $outputFile = null, $executable = 'nmap')
+    public function __construct(ProcessExecutor $executor = null, string $outputFile = null, string $executable = 'nmap')
     {
         $this->executor = $executor ?: new ProcessExecutor();
         $this->outputFile = $outputFile ?: tempnam(sys_get_temp_dir(), 'nmap-scan-output.xml');
@@ -83,7 +83,7 @@ class Nmap
      * @param array $ports
      * @return array - implode with ' ' to get a command line string.
      */
-    public function buildCommand(array $targets, array $ports = array())
+    public function buildCommand(array $targets, array $ports = array()): array
     {
         $options = $this->extraOptions;
 
@@ -132,11 +132,10 @@ class Nmap
      *
      * @return Host[]
      */
-    public function scan(array $targets, array $ports = array())
+    public function scan(array $targets, array $ports = array()): array
     {
 
         $command = $this->buildCommand($targets, $ports);
-
 
         $this->executor->execute($command, $this->timeout);
 
@@ -152,7 +151,7 @@ class Nmap
      *
      * @return Nmap
      */
-    public function enableOsDetection($enable = true)
+    public function enableOsDetection($enable = true): self
     {
         $this->enableOsDetection = $enable;
 
@@ -164,7 +163,7 @@ class Nmap
      *
      * @return Nmap
      */
-    public function enableServiceInfo($enable = true)
+    public function enableServiceInfo($enable = true): self
     {
         $this->enableServiceInfo = $enable;
 
@@ -176,7 +175,7 @@ class Nmap
      *
      * @return Nmap
      */
-    public function enableVerbose($enable = true)
+    public function enableVerbose($enable = true): self
     {
         $this->enableVerbose = $enable;
 
@@ -188,7 +187,7 @@ class Nmap
      *
      * @return Nmap
      */
-    public function disablePortScan($disable = true)
+    public function disablePortScan($disable = true): self
     {
         $this->disablePortScan = $disable;
 
@@ -200,7 +199,7 @@ class Nmap
      *
      * @return Nmap
      */
-    public function disableReverseDNS($disable = true)
+    public function disableReverseDNS($disable = true): self
     {
         $this->disableReverseDNS = $disable;
 
@@ -212,7 +211,7 @@ class Nmap
      *
      * @return Nmap
      */
-    public function treatHostsAsOnline($disable = true)
+    public function treatHostsAsOnline($disable = true): self
     {
         $this->treatHostsAsOnline = $disable;
 
@@ -224,7 +223,7 @@ class Nmap
      *
      * @return Nmap
      */
-    public function setTimeout($timeout)
+    public function setTimeout($timeout): self
     {
         $this->timeout = $timeout;
 

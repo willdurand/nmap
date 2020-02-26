@@ -35,10 +35,16 @@ class XmlOutputParser
     {
         $hostnames = array();
         foreach ($xmlHostnames as $hostname) {
-            $hostnames[] = new Hostname(
-                (string)$hostname->attributes()->name,
-                (string)$hostname->attributes()->type
-            );
+            $attrs = $hostname->attributes();
+            $name = $type = null;
+            if (!is_null($attrs)) {
+                $name = $attrs->name;
+                $type = $attrs->type;
+            }
+
+            if (!is_null($name) && !is_null($type)) {
+                $hostnames[] = new Hostname((string)$name, (string)$type);
+            }
         }
 
         return $hostnames;
@@ -48,7 +54,7 @@ class XmlOutputParser
      * @param \SimpleXMLElement $xmlPorts
      * @return Port[]
      */
-    public static function parsePorts(\SimpleXMLElement $xmlPorts)
+    public static function parsePorts(\SimpleXMLElement $xmlPorts): array
     {
         /**
          *
@@ -59,21 +65,26 @@ class XmlOutputParser
             $name = $product = $version = null;
 
             if ($port->service) {
-                $name = (string)$port->service->attributes()->name;
-                $product = (string)$port->service->attributes()->product;
-                $version = $port->service->attributes()->version;
+                $attrs = $port->service->attributes();
+                if (!is_null($attrs)) {
+                    $name = (string)$attrs->name;
+                    $product = (string)$attrs->product;
+                    $version = $attrs->version;
+                }
             }
 
             $service = new Service(
                 $name, $product, $version);
 
-            $ports[] = new Port(
-                (string)$port->attributes()->portid,
-                (string)$port->attributes()->protocol,
-                (string)$port->state->attributes()->state,
-                $service);
+            $attrs = $port->attributes();
+            if (!is_null($attrs)) {
+                $ports[] = new Port(
+                    (int)$attrs->portid,
+                    (string)$attrs->protocol,
+                    (string)$port->state->attributes()->state,
+                    $service);
 
-
+            }
         }
 
         return $ports;
@@ -83,7 +94,7 @@ class XmlOutputParser
      * @param \SimpleXMLElement $host
      * @return Address[]
      */
-    public static function parseAddresses(\SimpleXMLElement $host)
+    public static function parseAddresses(\SimpleXMLElement $host): array
     {
         $addresses = array();
         foreach ($host->xpath('./address') as $address) {

@@ -21,23 +21,33 @@ class Service
 
     private $version;
 
-    public function __construct($name, $product, $version)
+    public function __construct(string $name = null, string $product = null, string $version = null)
     {
         $this->name = $name;
         $this->product = $product;
         $this->version = $version;
     }
 
+    /**
+     * @return string|null
+     */
     public function getName()
     {
         return $this->name;
     }
 
+
+    /**
+     * @return string|null
+     */
     public function getProduct()
     {
         return $this->product;
     }
 
+    /**
+     * @return string|null
+     */
     public function getVersion()
     {
         return $this->version;

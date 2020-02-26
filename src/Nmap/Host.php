@@ -27,7 +27,7 @@ class Host
 
     private $ports;
 
-    public function __construct($addresses, $state, array $hostnames = array(), array $ports = array())
+    public function __construct(array $addresses, string $state, array $hostnames = array(), array $ports = array())
     {
         $this->addresses = $addresses;
         $this->state     = $state;
@@ -40,7 +40,7 @@ class Host
      *
      * @deprecated The Host::getAddress() method is deprecated since 0.4 version. Use Host::getIpv4Addresses() instead.
      */
-    public function getAddress()
+    public function getAddress() : string
     {
         return current($this->getIpv4Addresses())->getAddress();
     }
@@ -48,7 +48,7 @@ class Host
     /**
      * @return Address[]
      */
-    public function getAddresses()
+    public function getAddresses() : array
     {
         return $this->addresses;
     }
@@ -58,7 +58,7 @@ class Host
      *
      * @return Address[]
      */
-    private function getAddressesByType($type)
+    private function getAddressesByType(string $type) : array
     {
         return array_filter($this->addresses, function (Address $address) use ($type) {
             return $address->getType() === $type;
@@ -68,7 +68,7 @@ class Host
     /**
      * @return Address[]
      */
-    public function getIpv4Addresses()
+    public function getIpv4Addresses() : array
     {
         return $this->getAddressesByType(Address::TYPE_IPV4);
     }
@@ -76,7 +76,7 @@ class Host
     /**
      * @return Address[]
      */
-    public function getMacAddresses()
+    public function getMacAddresses() : array
     {
         return $this->getAddressesByType(Address::TYPE_MAC);
     }
@@ -84,7 +84,7 @@ class Host
     /**
      * @return string
      */
-    public function getState()
+    public function getState() : string
     {
         return $this->state;
     }
@@ -92,7 +92,7 @@ class Host
     /**
      * @return Hostname[]
      */
-    public function getHostnames()
+    public function getHostnames() : array
     {
         return $this->hostnames;
     }
@@ -100,7 +100,7 @@ class Host
     /**
      * @return Port[]
      */
-    public function getPorts()
+    public function getPorts() : array
     {
         return $this->ports;
     }
@@ -108,7 +108,7 @@ class Host
     /**
      * @return Port[]
      */
-    public function getOpenPorts()
+    public function getOpenPorts() : array
     {
         return array_filter($this->ports, function ($port) {
             return $port->isOpen();
@@ -118,7 +118,7 @@ class Host
     /**
      * @return Port[]
      */
-    public function getClosedPorts()
+    public function getClosedPorts() : array
     {
         return array_filter($this->ports, function ($port) {
             return $port->isClosed();
