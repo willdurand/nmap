@@ -4,8 +4,7 @@ nmap
 **nmap** is a PHP wrapper for [Nmap](http://nmap.org/), a free security scanner
 for network exploration.
 
-[![Build Status](https://travis-ci.org/DavidGoodwin/nmap.svg?branch=master)](https://travis-ci.org/DavidGoodwin/nmap)
-
+![PHP Build](https://github.com/DavidGoodwin/nmap/workflows/PHP%20Build/badge.svg)
 
 Usage
 -----
