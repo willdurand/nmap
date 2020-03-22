@@ -8,6 +8,7 @@ nmap
 
 Usage
 -----
+use Nmap\Nmap;
 
 ```php
 $hosts = Nmap::create()->scan([ 'williamdurand.fr' ]);
