@@ -116,10 +116,6 @@ class Nmap
 
         $this->executor->execute($command, $this->timeout);
 
-        if (!file_exists($this->outputFile)) {
-            throw new \RuntimeException(sprintf('Output file not found ("%s")', $this->outputFile));
-        }
-
         return $this->parseOutputFile($this->outputFile);
     }
 
@@ -207,8 +203,17 @@ class Nmap
         return $this;
     }
 
-    private function parseOutputFile($xmlFile)
+    /**
+     * @param string $xmlFile
+     *
+     * @return Host[]
+     */
+    public function parseOutputFile($xmlFile)
     {
+        if (!file_exists($xmlFile)) {
+            throw new \RuntimeException(sprintf('Output file not found ("%s")', $xmlFile));
+        }
+
         $xml = simplexml_load_file($xmlFile);
 
         $hosts = array();

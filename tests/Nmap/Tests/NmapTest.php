@@ -267,6 +267,15 @@ class NmapTest extends TestCase
         new Nmap($executor);
     }
 
+    public function testExistingXmlOutputFileCanBeParsed()
+    {
+        $nmap = new Nmap($this->getProcessExecutorMock());
+        $hosts = $nmap->parseOutputFile(__DIR__ . '/Fixtures/test_scan.xml');
+        $host = current($hosts);
+        $this->assertCount(1, $hosts);
+        $this->assertCount(5, $host->getPorts());
+    }
+
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject | \Nmap\Util\ProcessExecutor
      */
