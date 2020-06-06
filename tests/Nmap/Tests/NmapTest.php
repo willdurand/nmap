@@ -258,7 +258,7 @@ class NmapTest extends TestCase
      */
     public function testExecutableNotExecutable()
     {
-        $executor = $this->getMock('Nmap\Util\ProcessExecutor');
+        $executor = $this->createMock('Nmap\Util\ProcessExecutor');
         $executor
             ->expects($this->once())
             ->method('execute')
@@ -272,7 +272,7 @@ class NmapTest extends TestCase
      */
     private function getProcessExecutorMock()
     {
-        $executor = $this->getMock('Nmap\Util\ProcessExecutor');
+        $executor = $this->createMock('Nmap\Util\ProcessExecutor');
         $executor
             ->expects($this->at(0))
             ->method('execute')
